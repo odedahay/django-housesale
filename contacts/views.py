@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -26,14 +27,17 @@ def contact(request):
         contact = Contact(listing=listing, listing_id=listing_id, name=name, email=email, phone=phone, message=message, user_id=user_id )
         contact.save()
 
-        # Send email
-        # send_mail(
-        #     'Property Listing Inquiry',
-        #     'There has been an inquiry for ' + listing + '. Sign into the admin panel for more info',
-        #     'odedahay@gmail.com',
-        #     [realtor_email, 'techguyinfo@gmail.com'],
-        #     fail_silently=False
-        # )
+        # Send email ##, 
+        subject = 'Contact From Received'      
+        from_email = settings.DEFAULT_FROM_EMAIL 
+        #to_email = [settings.DEFAULT_FROM_EMAIL, 'techguyinfo@gmail.com']
+        send_mail(
+            'Property Listing Inquiry - Website', 
+            'There has been an inquiry for ' + listing + '. Sign into the admin panel for more info', 
+            email, 
+            [realtor_email, from_email],
+            fail_silently=False
+        )
 
         messages.success(request, 'Your request has been submitted, a realtor will get back to you soon')
 
